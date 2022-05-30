@@ -13,6 +13,7 @@ import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.washme.databinding.FragmentMapsBinding
@@ -47,7 +48,7 @@ class MapsFragment : Fragment() {
         }
 
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(myCurrentLocation))
-
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myCurrentLocation,14.0f))
         val mMap = googleMap
 
         mMap.setOnMapClickListener(object :GoogleMap.OnMapClickListener {
@@ -70,7 +71,7 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        reqPerm()
 
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -193,4 +194,25 @@ class MapsFragment : Fragment() {
                 .show()
         }
     }*/
+
+    fun reqPerm(){
+        val locationPermissionRequest = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            when {
+                permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                    // Precise location access granted.
+                }
+                permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                    // Only approximate location access granted.
+                } else -> {
+                // No location access granted.
+            }
+            }
+        }
+
+        locationPermissionRequest.launch(arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION))
+    }
 }

@@ -12,7 +12,7 @@ class SignUpActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.sign_up_button2).setOnClickListener {
             startActivity(Intent(this,SignInActivity::class.java))
-            finish()
+
         }
 
     }
