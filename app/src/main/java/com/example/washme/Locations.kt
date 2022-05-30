@@ -12,7 +12,7 @@ object Locations {
         Location(LatLng(40.94969691100026, 29.178019557489044))
     )
     fun loadLocations(latitude:Double,longitude:Double){
-        locations.add(Location(LatLng(latitude,longitude)))
+        locations.add(Location(LatLng(40.957932798157486, 29.186265126892064)))
 
     }
 }

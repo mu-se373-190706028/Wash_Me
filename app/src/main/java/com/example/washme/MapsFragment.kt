@@ -1,6 +1,7 @@
 package com.example.washme
 
 import android.Manifest
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
@@ -18,6 +19,7 @@ import com.example.washme.databinding.FragmentMapsBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
@@ -43,7 +45,22 @@ class MapsFragment : Fragment() {
         for(i in Locations.locations){
             googleMap.addMarker(MarkerOptions().position(i.location).title("Car"))
         }
+
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(myCurrentLocation))
+
+        val mMap = googleMap
+
+        mMap.setOnMapClickListener(object :GoogleMap.OnMapClickListener {
+            override fun onMapClick(latlng :LatLng) {
+                // Clears the previously touched position
+
+                // Animating to the touched position
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(latlng));
+
+                val location = LatLng(latlng.latitude,latlng.longitude)
+                mMap.addMarker(MarkerOptions().position(location))
+            }
+        })
 
 
     }
@@ -53,6 +70,8 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
         val root: View = binding.root
        /* client = LocationServices
@@ -84,6 +103,31 @@ class MapsFragment : Fragment() {
             showDialog("Add Order")
 
         }
+        binding.deleteOrderFloatingButton.setOnClickListener {
+
+
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Order Deletion")
+            builder.setMessage("Do you want to delete customer's order")
+//builder.setPositiveButton("OK", DialogInterface.OnClickListener(function = x))
+
+            builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+                Toast.makeText(requireContext(),
+                    "Order Successfully Deleted", Toast.LENGTH_LONG).show()
+            }
+
+            builder.setNegativeButton(android.R.string.no) { dialog, which ->
+                Toast.makeText(requireContext(),
+                    "Order Is Still Active", Toast.LENGTH_LONG).show()
+            }
+            builder.show()
+
+        }
+
+
+
+
+
         return root
     }
 
@@ -95,7 +139,6 @@ class MapsFragment : Fragment() {
         val yesBtn = dialog.findViewById(R.id.btn_dialog_save) as Button
         val noBtn = dialog.findViewById(R.id.btn_dialog_cancel) as TextView
         yesBtn.setOnClickListener {
-
 
             dialog.dismiss()
         }
@@ -115,6 +158,13 @@ class MapsFragment : Fragment() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
     }
+
+
+
+
+
+
+
 /*
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String?>,

@@ -23,6 +23,23 @@
         android:layout_marginBottom="35dp"
         android:src="@drawable/ic_car_gps_location_12857" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/delete_order_floating_button"
+        app:fabCustomSize="75dp"
+        app:maxImageSize="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="35dp"
+
+
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="35dp"
+        android:src="@drawable/ic_remove_location" />
+
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
